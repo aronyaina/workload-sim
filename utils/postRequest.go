@@ -28,7 +28,7 @@ func PostFormData(r models.Request, cancel <-chan struct{}) (*http.Response, err
 	}
 
 	duration := time.Since(startTime)
-	log.Println("POST ,Time taken:", r.URL, duration)
+	log.Println("GET "+r.URL+" Time taken:", duration)
 
 	if err := CheckCancelation(cancel); err != nil {
 		return nil, err
@@ -51,7 +51,7 @@ func PostJSONBody(r models.Request, cancel <-chan struct{}) (*http.Response, err
 		return nil, err
 	}
 	duration := time.Since(startTime)
-	log.Println("POST ,Time taken:", r.URL, duration)
+	log.Println("GET "+r.URL+" Time taken:", duration)
 
 	defer resp.Body.Close()
 	respBody, _ := io.ReadAll(resp.Body)

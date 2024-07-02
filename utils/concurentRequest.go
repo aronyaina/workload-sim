@@ -23,7 +23,7 @@ func HandleRequestsConcurrently(requests []models.Request, cancel <-chan struct{
 				case "GET":
 					_, err := GetData(r, cancel)
 					if err != nil {
-						log.Printf("Error creating POST request to %s: %v", r.URL, err)
+						log.Printf("Error creating GET request to %s: %v", r.URL, err)
 					}
 				case "POST":
 					var resp *http.Response

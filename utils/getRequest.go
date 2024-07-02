@@ -16,7 +16,7 @@ func GetData(r models.Request, cancel <-chan struct{}) (*http.Response, error) {
 		log.Printf("Error performing GET request to %s: %v", r.URL, err)
 	}
 	duration := time.Since(startTime)
-	log.Println("GET Time taken:", r.URL, duration)
+	log.Println("GET "+r.URL+" Time taken:", duration)
 
 	if err := CheckCancelation(cancel); err != nil {
 		return nil, err
