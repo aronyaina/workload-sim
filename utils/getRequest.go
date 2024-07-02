@@ -8,7 +8,7 @@ import (
 	"github.com/aronyaina/workload-sim/models"
 )
 
-func GetData(r models.Request) (*http.Response, error) {
+func GetData(r models.Request, cancel <-chan struct{}) (*http.Response, error) {
 
 	startTime := time.Now()
 	resp, err := http.Get(r.URL)
@@ -18,5 +18,8 @@ func GetData(r models.Request) (*http.Response, error) {
 	duration := time.Since(startTime)
 	log.Println("GET Time taken:", r.URL, duration)
 
-	return resp, err
+	if err := CheckCancelation(cancel); err != nil {
+		return nil, err
+	}
+	return resp, nil
 }

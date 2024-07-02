@@ -15,7 +15,7 @@ import (
 	"github.com/aronyaina/workload-sim/models"
 )
 
-func PostFormData(r models.Request) (*http.Response, error) {
+func PostFormData(r models.Request, cancel <-chan struct{}) (*http.Response, error) {
 	formData := url.Values{}
 	for key, value := range r.Form {
 		formData.Set(key, value)
@@ -29,10 +29,14 @@ func PostFormData(r models.Request) (*http.Response, error) {
 
 	duration := time.Since(startTime)
 	log.Println("POST ,Time taken:", r.URL, duration)
+
+	if err := CheckCancelation(cancel); err != nil {
+		return nil, err
+	}
 	return resp, nil
 }
 
-func PostJSONBody(r models.Request) (*http.Response, error) {
+func PostJSONBody(r models.Request, cancel <-chan struct{}) (*http.Response, error) {
 	bodyBytes, err := json.Marshal(r.Body)
 	//log.Println("JSON body:", string(bodyBytes))
 	if err != nil {
@@ -61,6 +65,10 @@ func PostJSONBody(r models.Request) (*http.Response, error) {
 	} else if resp.StatusCode >= 400 {
 		log.Printf("HTTP %d: %s", resp.StatusCode, string(respBody))
 		return nil, fmt.Errorf("HTTP %d: %s", resp.StatusCode, string(respBody))
+	}
+
+	if err := CheckCancelation(cancel); err != nil {
+		return nil, err
 	}
 
 	return resp, nil
