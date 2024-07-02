@@ -11,8 +11,8 @@ import (
 
 func main() {
 
-	if len(os.Args) < 4 {
-		log.Fatal("Usage: main <file_path> <limit> <timeout_seconds> <requests_per_second>")
+	if len(os.Args) < 5 {
+		log.Fatal("Usage: main <file_path> <limit_requests> <timeout_seconds> <requests_per_second>")
 	}
 
 	filePath := os.Args[1]
