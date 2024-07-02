@@ -4,12 +4,15 @@ import (
 	"log"
 	"net/http"
 	"sync"
+	"time"
 
 	"github.com/aronyaina/workload-sim/models"
 )
 
-func HandleRequestsConcurrently(requests []models.Request, cancel <-chan struct{}) {
+func HandleRequestsConcurrently(requests []models.Request, cancel <-chan struct{}, requestsPerSecond int) {
 	var wg sync.WaitGroup
+
+	limiter := time.Tick(time.Second / time.Duration(requestsPerSecond))
 
 	for _, req := range requests {
 		wg.Add(1)
@@ -18,7 +21,7 @@ func HandleRequestsConcurrently(requests []models.Request, cancel <-chan struct{
 			select {
 			case <-cancel:
 				return
-			default:
+			case <-limiter:
 				switch r.Method {
 				case "GET":
 					_, err := GetData(r, cancel)
