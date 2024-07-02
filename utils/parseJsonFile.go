@@ -3,22 +3,17 @@ package utils
 import (
 	"encoding/json"
 	"os"
+
+	"github.com/aronyaina/workload-sim/models"
 )
 
-type Request struct {
-	URL    string            `json:"url"`
-	Method string            `json:"method"`
-	Params map[string]string `json:"params,omitempty"`
-	Form   map[string]string `json:"form,omitempty"`
-}
-
-func ParseJSONFile(filePath string) ([]Request, error) {
+func ParseJSONFile(filePath string) ([]models.Request, error) {
 	data, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
 
-	var requests []Request
+	var requests []models.Request
 	err = json.Unmarshal(data, &requests)
 	if err != nil {
 		return nil, err

@@ -1,37 +1,37 @@
 [
   {
-    "url": "localhost:8080/users/register",
+    "url": "http://localhost:8080/users/register",
     "method": "POST",
     "body": {
       "user_name": "foo4",
-      "user_password": "ewajknk123!4",
+      "user_password": "Aewajknk123!4",
       "role_id": 2
     }
   },
   {
-    "url": "localhost:8080/users/register",
+    "url": "http://localhost:8080/users/register",
     "method": "POST",
     "body": {
       "user_name": "foo3",
-      "user_password": "ewajknk123!4",
+      "user_password": "Aewajknk123!4",
       "role_id": 2
     }
   },
   {
-    "url": "localhost:8080/users/register",
+    "url": "http://localhost:8080/users/register",
     "method": "POST",
     "body": {
       "user_name": "foo2",
-      "user_password": "ewajknk123!4bar",
+      "user_password": "Aewajknk123!4bar",
       "role_id": 2
     }
   },
   {
-    "url": "localhost:8080/users/register",
+    "url": "http://localhost:8080/users/register",
     "method": "POST",
     "body": {
       "user_name": "foo1",
-      "user_password": "ewajknk123!4bar",
+      "user_password": "Aewajknk123!4bar",
       "role_id": 2
     }
   }

@@ -7,10 +7,16 @@ import (
 )
 
 func main() {
-	filePath := "./seeder/first.json"
+	filePath := "./seeder/projects_test.json"
 	requests, err := utils.ParseJSONFile(filePath)
 	if err != nil {
 		log.Fatalf("Error parsing JSON file: %v", err)
 	}
+
+	limit := 100
+	if len(requests) > limit {
+		requests = requests[:limit]
+	}
+
 	utils.HandleRequestsConcurrently(requests)
 }
