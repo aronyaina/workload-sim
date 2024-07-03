@@ -1,4 +1,4 @@
-# INSTALLATION
+# Installation
 ```sh
 # Build bin app to be stress-test
 # Syntax go build <binary_name> -o <go-main>
@@ -9,11 +9,11 @@ main <file_name> <limit_request> <timeout_seconds> <requests_per_second>
 
 ```
 
-# CONTEXT
+# Context
 C'est une application permettant de tester l'efficacite d'un serveur par l'envoie de requete, avec des limites definis par l'utilisateurs.
 Golang est le language principal de cette application, pour des besoins multithread et ultra legere, facile a compile et tres portable 
 
-# UTILISATION
+# Utilisation
 Nom du programme suivi des options suivant
 ```
 main <file_name> <limit_request> <timeout_seconds> <requests_per_second>
@@ -24,14 +24,18 @@ determine le fichier ayant le format json , permettant de seeder les requetes:
 [
   {
     "url": "http://localhost:8080/projects",
+    "method": "GET",
+  },
+  {
+    "url": "http://localhost:8080/projects",
     "method": "POST",
     "body": {
       "project_name": "foo442901"
     }
   },
   {
-    "url": "http://localhost:8080/projects",
-    "method": "POST",
+    "url": "http://localhost:8080/projects/5",
+    "method": "PUT",
     "form": {
       "project_name": "foo442901"
     }
@@ -53,6 +57,6 @@ le temps accepter pour qu'une requete sois execute, si la duree d'une requete de
 ### request_per_second
 le total de requte par seconde pour une meilleur simulation
 
-# RELEASE
+# Release
 ## V1.1 (Sans PUT - DELETE)
 ## V1.2 (Avec PUT - DELETE)
