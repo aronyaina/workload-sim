@@ -45,6 +45,28 @@ func HandleRequestsConcurrently(requests []models.Request, cancel <-chan struct{
 						log.Printf("Error creating POST request to %s: %v", r.URL, err)
 						return
 					}
+				case "PUT":
+					var resp *http.Response
+					var err error
+
+					if len(r.Form) > 0 {
+						_, err = PutFormData(r, cancel)
+					} else if r.Body != nil {
+						_, err = PutJSONBody(r, cancel)
+					} else {
+						_ = resp
+						log.Fatalln("Error parsing body ...")
+					}
+
+					if err != nil {
+						log.Printf("Error creating PUT request to %s: %v", r.URL, err)
+						return
+					}
+				case "DELETE":
+					_, err := DeleteData(r, cancel)
+					if err != nil {
+						log.Printf("Error creating DELETE request to %s: %v", r.URL, err)
+					}
 
 				default:
 					log.Printf("Unsupported method: %s for URL: %s", r.Method, r.URL)

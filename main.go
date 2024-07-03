@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-
 	if len(os.Args) < 5 {
 		log.Fatal("Usage: main <file_path> <limit_requests> <timeout_seconds> <requests_per_second>")
 	}
@@ -29,6 +28,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Timeout must be number: %v", err)
 	}
+
 	ts, err := strconv.Atoi(request_second)
 	if err != nil {
 		log.Fatalf("Request per second must be number: %v", err)
