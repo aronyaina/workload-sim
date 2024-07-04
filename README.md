@@ -1,5 +1,15 @@
 # Installation
+
+## Build from source 
+### Install golang 1.22 
+installation for go in Linux, Windows , Macos in: https://go.dev/dl/
+
+### Clonning the project from source
 ```sh
+git clone https://github.com/aronyaina/workload-sim.git
+cd workload-sim
+
+go mod tidy
 # Build bin app to be stress-test
 # Syntax go build <binary_name> -o <go-main>
 go build main -o main.go
@@ -8,6 +18,12 @@ go build main -o main.go
 main <file_name> <limit_request> <timeout_seconds> <requests_per_second>
 
 ```
+
+## Run it from bin
+```sh
+main <file_name> <limit_request> <timeout_seconds> <requests_per_second>
+```
+
 
 # Context
 C'est une application permettant de tester l'efficacite d'un serveur par l'envoie de requete, avec des limites definis par l'utilisateurs.
