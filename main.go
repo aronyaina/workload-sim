@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/aronyaina/workload-sim/handler"
 	"github.com/aronyaina/workload-sim/utils"
 )
 
@@ -15,23 +16,19 @@ func main() {
 	}
 
 	filePath := os.Args[1]
-	limit := os.Args[2]
-	t_timeout := os.Args[3]
-	request_second := os.Args[4]
-
-	l, err := strconv.Atoi(limit)
+	limit, err := strconv.Atoi(os.Args[2])
 	if err != nil {
 		log.Fatalf("Limit must be a number: %v", err)
 	}
 
-	t, err := strconv.Atoi(t_timeout)
+	timeout, err := strconv.Atoi(os.Args[3])
 	if err != nil {
-		log.Fatalf("Timeout must be number: %v", err)
+		log.Fatalf("Timeout must be a number: %v", err)
 	}
 
-	ts, err := strconv.Atoi(request_second)
+	requestsPerSecond, err := strconv.Atoi(os.Args[4])
 	if err != nil {
-		log.Fatalf("Request per second must be number: %v", err)
+		log.Fatalf("Requests per second must be a number: %v", err)
 	}
 
 	requests, err := utils.ParseJSONFile(filePath)
@@ -39,20 +36,12 @@ func main() {
 		log.Fatalf("Error parsing JSON file: %v", err)
 	}
 
-	timeout := time.After(time.Duration(t) * time.Second)
+	if len(requests) > limit {
+		requests = requests[:limit]
+	}
+
 	cancel := make(chan struct{})
+	go handler.HandleRequestsConcurrently(requests, cancel, requestsPerSecond, time.Duration(timeout)*time.Second)
 
-	if len(requests) > l {
-		requests = requests[:l]
-	}
-
-	go func() {
-		utils.HandleRequestsConcurrently(requests, cancel, ts)
-	}()
-
-	select {
-	case <-timeout:
-		close(cancel)
-		log.Println("Timed out , Stopping request")
-	}
+	select {}
 }
