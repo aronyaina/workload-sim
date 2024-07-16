@@ -9,12 +9,14 @@ import (
 	"github.com/aronyaina/workload-sim/models"
 )
 
+var RequestCount int
+
 func HandleRequestsConcurrently(requests []models.Request, cancel <-chan struct{}, requestsPerSecond int) {
 	var wg sync.WaitGroup
 
 	limiter := time.Tick(time.Second / time.Duration(requestsPerSecond))
 
-	for _, req := range requests {
+	for i, req := range requests {
 		wg.Add(1)
 		go func(r models.Request) {
 			defer wg.Done()
@@ -73,6 +75,7 @@ func HandleRequestsConcurrently(requests []models.Request, cancel <-chan struct{
 				}
 			}
 		}(req)
+		RequestCount = i + 1
 	}
 	wg.Wait()
 }

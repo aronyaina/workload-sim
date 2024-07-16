@@ -53,6 +53,6 @@ func main() {
 	select {
 	case <-timeout:
 		close(cancel)
-		log.Println("Timed out , Stopping request")
+		log.Println("TIME OUT , TOTAL REQUEST :", utils.RequestCount)
 	}
 }
