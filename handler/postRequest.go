@@ -2,6 +2,7 @@ package handler
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,14 +16,15 @@ import (
 	"github.com/aronyaina/workload-sim/models"
 )
 
-func PostFormData(r models.Request, cancel <-chan struct{}) (*http.Response, error) {
+func PostFormData(r models.Request, cancel <-chan struct{}, ctx context.Context) (*http.Response, error) {
 	formData := url.Values{}
 	for key, value := range r.Form {
 		formData.Set(key, value)
 	}
 
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, r.URL, strings.NewReader(formData.Encode()))
 	startTime := time.Now()
-	resp, err := http.Post(r.URL, "application/x-www-form-urlencoded", strings.NewReader(formData.Encode()))
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +38,7 @@ func PostFormData(r models.Request, cancel <-chan struct{}) (*http.Response, err
 	return resp, nil
 }
 
-func PostJSONBody(r models.Request, cancel <-chan struct{}) (*http.Response, error) {
+func PostJSONBody(r models.Request, cancel <-chan struct{}, ctx context.Context) (*http.Response, error) {
 	bodyBytes, err := json.Marshal(r.Body)
 	//log.Println("JSON body:", string(bodyBytes))
 	if err != nil {
@@ -44,8 +46,9 @@ func PostJSONBody(r models.Request, cancel <-chan struct{}) (*http.Response, err
 		return nil, err
 	}
 
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, r.URL, bytes.NewReader(bodyBytes))
 	startTime := time.Now()
-	resp, err := http.Post(r.URL, "application/json", bytes.NewReader(bodyBytes))
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		log.Println(err)
 		return nil, err

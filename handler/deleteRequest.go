@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"time"
@@ -8,10 +9,10 @@ import (
 	"github.com/aronyaina/workload-sim/models"
 )
 
-func DeleteData(r models.Request, cancel <-chan struct{}) (*http.Response, error) {
+func DeleteData(r models.Request, cancel <-chan struct{}, ctx context.Context) (*http.Response, error) {
 	startTime := time.Now()
 
-	req, err := http.NewRequest(http.MethodDelete, r.URL, nil)
+	req, err := http.NewRequestWithContext(ctx, http.MethodDelete, r.URL, nil)
 	if err != nil {
 		return nil, err
 	}

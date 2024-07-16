@@ -41,7 +41,7 @@ func main() {
 	}
 
 	cancel := make(chan struct{})
-	go handler.HandleRequestsConcurrently(requests, cancel, requestsPerSecond, time.Duration(timeout)*time.Second)
+	go handler.HandleRequestsConcurrently(requests, time.Duration(timeout)*time.Second, requestsPerSecond, cancel)
 
 	select {}
 }

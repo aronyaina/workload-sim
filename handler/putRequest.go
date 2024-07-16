@@ -2,6 +2,7 @@ package handler
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -15,7 +16,7 @@ import (
 	"github.com/aronyaina/workload-sim/models"
 )
 
-func PutFormData(r models.Request, cancel <-chan struct{}) (*http.Response, error) {
+func PutFormData(r models.Request, cancel <-chan struct{}, ctx context.Context) (*http.Response, error) {
 	formData := url.Values{}
 	for key, value := range r.Form {
 		formData.Set(key, value)
@@ -23,7 +24,7 @@ func PutFormData(r models.Request, cancel <-chan struct{}) (*http.Response, erro
 
 	startTime := time.Now()
 
-	req, err := http.NewRequest(http.MethodPut, r.URL, strings.NewReader(formData.Encode()))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, r.URL, strings.NewReader(formData.Encode()))
 	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
 	if err != nil {
 		return nil, err
@@ -41,16 +42,15 @@ func PutFormData(r models.Request, cancel <-chan struct{}) (*http.Response, erro
 	return resp, nil
 }
 
-func PutJSONBody(r models.Request, cancel <-chan struct{}) (*http.Response, error) {
+func PutJSONBody(r models.Request, cancel <-chan struct{}, ctx context.Context) (*http.Response, error) {
 	bodyBytes, err := json.Marshal(r.Body)
-	//log.Println("JSON body:", string(bodyBytes))
 	if err != nil {
 		log.Printf("Error marshalling body for %s: %v", r.URL, err)
 		return nil, err
 	}
 
 	startTime := time.Now()
-	req, err := http.NewRequest(http.MethodPut, r.URL, bytes.NewReader(bodyBytes))
+	req, err := http.NewRequestWithContext(ctx, http.MethodPut, r.URL, bytes.NewReader(bodyBytes))
 	req.Header.Set("Content-type", "application/x-www-form-urlencoded")
 
 	if err != nil {
